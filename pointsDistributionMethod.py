@@ -32,10 +32,26 @@ def distribute_points(graph, points):
 
     return graph, new_points
 
+def handle_points_sink(graph, points):
+    reduction_percentage = 0.8
+    n = graph.number_of_nodes()
+
+    for i in range(len(points)):
+        points[i] = (float)(points[i])*reduction_percentage
+    
+    extra_points = ((float)(n)*100*(1 - reduction_percentage))/n
+    for i in range(len(points)):
+        points[i] += extra_points
+    
+    return points
+
+
 def distribute_points_till_convergence(graph, points):
     prev_points = points
     while(1):
         graph, new_points = distribute_points(graph, prev_points)
+        new_points = handle_points_sink(graph, new_points)
+
         char = input()
         if char == 'q':
             break
